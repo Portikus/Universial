@@ -7,11 +7,16 @@ using NUnit.Framework;
 
 namespace Universial.Test
 {
-    public class TestBase<T>
+    public class TestBase
+    {
+        
+    }
+
+    public class TestBase<T> : TestBase
     {
         protected T SystemUnderTest;
         [SetUp]
-        protected void SetUp()
+        protected virtual void SetUp()
         {
             
         }

@@ -48,6 +48,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\DictionaryExtensionsTest.cs" />
+    <Compile Include="Extensions\StringExtensionsTest.cs" />
     <Compile Include="Utilities\GuardTest.cs" />
     <Compile Include="Utilities\LambdaExpressionHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
