@@ -9,7 +9,7 @@ namespace Universial.Core.Extensions.Unity
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="container"></param>
-        public static void RegisterInstance<T>(this UnityContainer container)
+        public static void RegisterInstance<T>(this IUnityContainer container)
         {
             container.RegisterType<T>(container.Resolve<ContainerControlledLifetimeManager>());
         }
@@ -21,7 +21,7 @@ namespace Universial.Core.Extensions.Unity
         /// <typeparam name="TType"></typeparam>
         /// <typeparam name="TBase"></typeparam>
         /// <param name="container"></param>
-        public static void RegisterInstance<TBase,TType>(this UnityContainer container) where TType : TBase
+        public static void RegisterInstance<TBase,TType>(this IUnityContainer container) where TType : TBase
         {
             container.RegisterType<TBase,TType>(container.Resolve<ContainerControlledLifetimeManager>());
         }

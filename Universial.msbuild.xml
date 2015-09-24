@@ -79,7 +79,7 @@
   <!-- Creates a deployable zip directory with a version and a link, removes test dlls -->
   <Target Name="Deploy" >
     <PropertyGroup>
-      <DeployDir>$(SolutionDir)deploy\Universial.1.0</DeployDir>
+      <DeployDir>D:\Source\Projekte\ImageSorter\trunk\packages\Universial.1.0</DeployDir>
 	  <Src>$(SolutionDir)\bin\Release\</Src>
     </PropertyGroup>
 
@@ -97,8 +97,7 @@
          DestinationFiles="@(Sources->'$(DeployDir)\%(RecursiveDir)%(Filename)%(Extension)')"
     />	  
   </Target>
-  
-
+    
   <Target Name="PreChecks" BeforeTargets="Build;BuildClean">
 
     <Error Condition="!Exists($(SolutionPath))" Text="Solution path '$(SolutionPath)' does not exist" />
