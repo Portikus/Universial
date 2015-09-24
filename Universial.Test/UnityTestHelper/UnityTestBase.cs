@@ -6,6 +6,8 @@ namespace Universial.Test.UnityTestHelper
     {
         protected UnityContainer Container;
 
+        protected new T SystemUnderTest => Container.Resolve<T>();
+
         protected override void SetUp()
         {
             base.SetUp();
