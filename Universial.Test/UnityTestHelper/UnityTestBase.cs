@@ -1,4 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
+using Universial.Core.Extensions.Unity;
 
 namespace Universial.Test.UnityTestHelper
 {
@@ -12,6 +13,7 @@ namespace Universial.Test.UnityTestHelper
         {
             base.SetUp();
             Container = new UnityContainer();
+            Container.RegisterInstance<T>();
         }
     }
 }
