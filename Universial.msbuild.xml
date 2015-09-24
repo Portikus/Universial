@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- 
+
+    C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe Universial.msbuild.xml /p:TargetFrameworkVersion="v4.5.2"
+
+-->
+
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Help" TargetFrameworkVersion="4.5.2">
+
+  <PropertyGroup>
+    <SolutionDir>$(MSBuildProjectDirectory)\</SolutionDir>
+    <SolutionPath>$(SolutionDir)Universial.sln</SolutionPath>
+    <VSTools>$(VS110COMNTOOLS)</VSTools>
+    <AdditionalOptions>TreatWarningsAsErrors=True</AdditionalOptions>
+    <JetBrainsDupFinder>$(MSBuildProjectDirectory)\..\External\JetBrains.ReSharper.CommandLineTools\dupfinder.exe</JetBrainsDupFinder>
+    <JetBrainsInspector>$(MSBuildProjectDirectory)\..\External\JetBrains.ReSharper.CommandLineTools\inspectcode.exe</JetBrainsInspector>
+    <DupXsl>$(MSBuildProjectDirectory)\..\External\Xsl\duplicates.xsl</DupXsl>
+    <NUnitRunner>$(MSBuildProjectDirectory)\..\External\NUnit\bin\nunit-console.exe</NUnitRunner>
+	<NSIS>&quot;$(MSBuildProjectDirectory)\..\External\NSIS\makensis.exe&quot;</NSIS>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CurrentDate>$([System.DateTime]::Now.ToString(yyyy.MM.dd-hh.mm.ss))</CurrentDate>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <DefaultConfigurations Include="Debug;Release" />
+    <CleanBuildTargets  Include="Clean;Build" />
+  </ItemGroup>
+
+  <Target Name="Build">
+    <MSBuild Projects="$(SolutionPath)" Properties="Configuration=%(DefaultConfigurations.Identity);DevEnvDir=$(VSTools);$(AdditionalOptions)" />
+  </Target>
+
+  <Target Name="BuildClean">
+
+    <ItemGroup>
+      <Combined Include="@(DefaultConfigurations)" >
+        <Targets>%(CleanBuildTargets.Identity)</Targets>
+      </Combined>
+    </ItemGroup>
+
+    <MSBuild Projects="$(SolutionPath)" Targets="%(Combined.Targets)" Properties="Configuration=%(Combined.Identity);DevEnvDir=$(VSTools);$(AdditionalOptions)" />
+
+  </Target>
+
+  <Target Name="CodeAnalysis">
+    <MSBuild Projects="$(SolutionPath)" Targets="%(Combined.Targets)" Properties="DevEnvDir=$(VSTools);RunCodeAnalysis=true" />
+  </Target>
+ 
+  <Target Name="ResharperAll">
+
+    <CallTarget Targets="FindDuplicates" />
+ 
+  </Target>
+
+
+  <Target Name="FindDuplicates">
+    <Exec
+    WorkingDirectory=".."
+    Command="$(JetBrainsDupFinder) /normalize-types /exclude=&quot;**.Tests**&quot; /exclude=&quot;**.Testbench**&quot; /exclude=&quot;**Meta.cs&quot; /output=&quot;dupReport.xml&quot; /show-text &quot;$(SolutionPath)&quot;"
+    />
+
+    <MakeDir Directories="$(MSBuildProjectDirectory)\..\DupReports" />
+
+    <XslTransformation XslInputPath="$(DupXsl)" XmlInputPaths="..\dupReport.xml" OutputPaths="..\DupReports\dupReport-$(CurrentDate).html"/>
+
+
+
+    <XmlPeek XmlInputPath="..\dupReport.xml" Query="//Duplicate" >
+      <Output TaskParameter="Result" PropertyName="DuplicateLength"/>
+    </XmlPeek>
+
+    <Error Condition="$(DuplicateLength.Length)> 0" Text="Duplicates found"></Error>
+  </Target>
+
+  
+  <!-- Creates a deployable zip directory with a version and a link, removes test dlls -->
+  <Target Name="Deploy" >
+    <PropertyGroup>
+      <DeployDir>$(SolutionDir)deploy\Universial.1.0</DeployDir>
+	  <Src>$(SolutionDir)\bin\Release\</Src>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Sources Include="$(Src)**\*Universial*;" 
+	  Exclude="$(Src)**\*Tests*;$(Src)**\*Testbench*;$(Src)**\*vshost*;$(Src)**\*.xml;$(Src)**\*.pdb"  />
+    </ItemGroup>
+
+    <RemoveDir Condition="Exists($(DeployDir))" Directories="$(DeployDir)" />
+
+    <MakeDir Directories="$(DeployDir)" />
+
+    <Copy
+         SourceFiles="@(Sources)"
+         DestinationFiles="@(Sources->'$(DeployDir)\%(RecursiveDir)%(Filename)%(Extension)')"
+    />	  
+  </Target>
+  
+
+  <Target Name="PreChecks" BeforeTargets="Build;BuildClean">
+
+    <Error Condition="!Exists($(SolutionPath))" Text="Solution path '$(SolutionPath)' does not exist" />
+
+  </Target>
+
+
+  <!-- This is the main entry and only for documentation -->
+  <Target Name="Help">
+    <Message Text="Call this project with different targets, use /t:TargetName. Here is a list of all targets, read file for information on what they do"/>
+    <CallTarget Targets="DisplayAllTargets" />
+  </Target>
+
+
+
+  <!-- Helper to display all targets -->
+  <UsingTask TaskName="GetAllTargets"
+           TaskFactory="CodeTaskFactory"
+           AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll" >
+    <ParameterGroup>
+      <ProjectFile ParameterType="System.String" Required="true"/>
+      <TargetsOut ParameterType="Microsoft.Build.Framework.ITaskItem[]" Output="true"/>
+    </ParameterGroup>
+    <Task>
+      <Reference Include="System.Xml"/>
+      <Reference Include="Microsoft.Build"/>
+      <Reference Include="Microsoft.Build.Framework"/>
+      <Using Namespace="Microsoft.Build.Evaluation"/>
+      <Using Namespace="Microsoft.Build.Execution"/>
+      <Using Namespace="Microsoft.Build.Utilities"/>
+      <Using Namespace="Microsoft.Build.Framework"/>
+      <Code Type="Fragment" Language="cs">
+        <![CDATA[
+        var project = new Project(ProjectFile);
+
+        var taskItems = new List<ITaskItem>(project.Targets.Count);
+        foreach (KeyValuePair<string, ProjectTargetInstance> kvp in project.Targets)
+        {
+          var target = kvp.Value;
+          var metadata = new Dictionary<string, string>
+                          {
+                            {"Condition", target.Condition},
+                            {"Inputs", target.Inputs},
+                            {"Outputs", target.Outputs},
+                            {"DependsOnTargets", target.DependsOnTargets}
+                          };
+          taskItems.Add(new TaskItem(kvp.Key, metadata));
+        }
+
+        TargetsOut = taskItems.ToArray();
+      ]]>
+      </Code>
+    </Task>
+  </UsingTask>
+
+  <Target Name="DisplayAllTargets">
+    <GetAllTargets ProjectFile="$(MSBuildProjectFile)">
+      <Output ItemName="TargetItems" TaskParameter="TargetsOut"/>
+    </GetAllTargets>
+
+    <Message Text="Targets:" />
+    <Message Text="  * %(TargetItems.Identity)"/>
+  </Target>
+
+</Project>
