@@ -2,7 +2,7 @@
 
 <!-- 
 
-    C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe Universial.msbuild.xml /p:TargetFrameworkVersion="v4.5.2"
+    C:\Windows\Microsoft.NET\Framework\v4.0.30319\MSBuild.exe Universial.msbuild.xml /target:deploy
 
 -->
 
