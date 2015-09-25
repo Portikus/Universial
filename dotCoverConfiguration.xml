@@ -2,7 +2,7 @@
 <Filters>
   <ExcludeFilters>
     <FilterEntry>
-      <ClassMask>*.Tests.*</ClassMask>
+      <ModuleMask>*.Tests.*</ClassMask>
     </FilterEntry>
   </ExcludeFilters>
 </Filters>
