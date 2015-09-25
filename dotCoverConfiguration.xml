@@ -1,0 +1,9 @@
+<AnalyseParams>
+<Filters>
+  <ExcludeFilters>
+    <FilterEntry>
+      <ClassMask>*.Tests.*</ClassMask>
+    </FilterEntry>
+  </ExcludeFilters>
+</Filters>
+</AnalyseParams>
