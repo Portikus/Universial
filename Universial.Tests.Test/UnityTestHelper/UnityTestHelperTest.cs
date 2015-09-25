@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Microsoft.Practices.Unity;
+using NUnit.Framework;
 using Universial.Test.UnityTestHelper;
 
 namespace Universial.Tests.Test.UnityTestHelper
@@ -24,6 +25,20 @@ namespace Universial.Tests.Test.UnityTestHelper
             Assert.That(() => first, Is.SameAs(secound));
         }
 
+        [Test]
+        public void Test_if_SystemUnderTest_is_not_the_same_if_the_secound_is_new_resolved_from_container()
+        {
+            //Arrange 
+            var first = SystemUnderTest;
+
+            //Act
+            var secound = Container.Resolve<UnityTestHelperTest>();
+
+            //Assert
+            Assert.That(() => first, Is.Not.SameAs(secound));
+        }
+
+        #region Test over to test methods
         private UnityTestHelperTest _firstTestInstance;
 
         [Test]
@@ -35,12 +50,13 @@ namespace Universial.Tests.Test.UnityTestHelper
         [Test]
         public void Test_if_SystemUnderTest_is_a_new_object_in_a_new_test_Assert()
         {
-            //Act 
+            //Act
             var secound = SystemUnderTest;
-            
+
             //Assert
             Assert.That(() => _firstTestInstance, Is.Not.SameAs(secound));
-        }
+        } 
+        #endregion
 
         public void TestMethod()
         {

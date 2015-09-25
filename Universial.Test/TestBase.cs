@@ -7,7 +7,7 @@ namespace Universial.Test
         
     }
 
-    public class TestBase<T> : TestBase
+    public class TestBase<T> : TestBase where T : class
     {
         protected T SystemUnderTest;
         [SetUp]
