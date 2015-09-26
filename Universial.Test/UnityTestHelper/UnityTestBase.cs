@@ -1,4 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
+using NUnit.Framework;
 using Universial.Core.Extensions.Unity;
 
 namespace Universial.Test.UnityTestHelper
@@ -27,6 +28,12 @@ namespace Universial.Test.UnityTestHelper
             _systemUnderTest = null;
             Container = new UnityContainer();
             Container.RegisterType<T>();
+        }
+
+        [Test]
+        public void Test_if_resolving_the_SystemUnderTest_throws_no_exceptions()
+        {
+            Assert.That(()=> SystemUnderTest,Throws.Nothing);
         }
     }
 }
