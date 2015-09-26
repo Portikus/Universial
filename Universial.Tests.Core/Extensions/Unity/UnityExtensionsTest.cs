@@ -11,6 +11,7 @@ namespace Universial.Tests.Core.Extensions.Unity
         [SetUp]
         protected override void SetUp()
         {
+            base.SetUp();
             SystemUnderTest = new UnityContainer();
             SystemUnderTest.RegisterInstance<UnityExtensionsTest>();
             SystemUnderTest.RegisterInstance< TestBase ,UnityExtensionsTest >();

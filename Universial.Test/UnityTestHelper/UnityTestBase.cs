@@ -1,6 +1,5 @@
 ﻿using Microsoft.Practices.Unity;
 using NUnit.Framework;
-using Universial.Core.Extensions.Unity;
 
 namespace Universial.Test.UnityTestHelper
 {
@@ -10,18 +9,9 @@ namespace Universial.Test.UnityTestHelper
 
         private T _systemUnderTest;
 
-        protected new T SystemUnderTest
-        {
-            get
-            {
-                if (_systemUnderTest == null)
-                {
-                    _systemUnderTest = Container.Resolve<T>();
-                }
-                return _systemUnderTest;
-            }
-        }
+        protected new T SystemUnderTest => _systemUnderTest ?? (_systemUnderTest = Container.Resolve<T>());
 
+        [SetUp]
         protected override void SetUp()
         {
             base.SetUp();

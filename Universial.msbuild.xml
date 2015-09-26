@@ -85,7 +85,7 @@
 
     <ItemGroup>
       <Sources Include="$(Src)**\*Universial*;" 
-	  Exclude="$(Src)**\*Tests*;$(Src)**\*Testbench*;$(Src)**\*vshost*;$(Src)**\*.xml;$(Src)**\*.pdb"  />
+	  Exclude="$(Src)**\*Tests*;$(Src)**\*Testbench*;$(Src)**\*vshost*;$(Src)**\*.xml"  />
     </ItemGroup>
 
     <RemoveDir Condition="Exists($(DeployDir))" Directories="$(DeployDir)" />

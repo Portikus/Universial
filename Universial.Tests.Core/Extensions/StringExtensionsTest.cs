@@ -8,6 +8,7 @@ namespace Universial.Tests.Core.Extensions
         [SetUp]
         protected override void SetUp()
         {
+            base.SetUp();
             SystemUnderTest = "This is a test string";
         }
 

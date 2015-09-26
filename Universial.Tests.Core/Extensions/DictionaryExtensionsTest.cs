@@ -10,6 +10,7 @@ namespace Universial.Tests.Core.Extensions
         [SetUp]
         protected override void SetUp()
         {
+            base.SetUp();
             SystemUnderTest = new Dictionary<int, int>
             {
                 {1, 1},

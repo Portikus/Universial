@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Universial.Test
 {
-    public class TestBase
+    public abstract class TestBase
     {
         protected string TestDirectory = @".\TestDirectory";
 
@@ -101,14 +101,8 @@ namespace Universial.Test
 
     }
 
-    public class TestBase<T> : TestBase where T : class
+    public abstract class TestBase<T> : TestBase where T : class
     {
         protected T SystemUnderTest;
-        [SetUp]
-        protected override void SetUp()
-        {
-
-        }
-
     }
 }
