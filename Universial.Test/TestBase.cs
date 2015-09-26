@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -36,6 +37,14 @@ namespace Universial.Test
             DeleteDirecory(TestDirectory);
         }
 
+        #region Helper methods
+
+        #region FileHandling
+
+        /// <summary>
+        /// Deletes a directory recursive. If the directory could not be deleted after 10 tries an exception will be thrown
+        /// </summary>
+        /// <param name="testDirectory"></param>
         protected void DeleteDirecory(string testDirectory)
         {
             for (var i = 0; i < 10; i++)
@@ -53,6 +62,43 @@ namespace Universial.Test
             //If this point is reached the TearDown could not delete the TestDirectory after some time
             throw new TimeoutException($"Could not delete the directory {testDirectory} after some tries");
         }
+
+        /// <summary>
+        /// Creates a file in the TestDirectory
+        /// </summary>
+        /// <param name="fileName"></param>
+        protected void CreateFileInTestDirectory(string fileName)
+        {
+            Core.Utilities.Guard.CheckIfNotNull(()=>fileName);
+            Assert.That(_needsTestDir,Is.True,$"The {nameof(NeedsTestDirAttribute)} is missing in the {GetType().Name} class.{Environment.NewLine}" +
+                                                    $"Add the {nameof(NeedsTestDirAttribute)}");
+            using(File.Create(Path.Combine(TestDirectory, fileName))){ }
+        }
+
+        /// <summary>
+        /// Creates a file in the TestDirectory
+        /// </summary>
+        /// <param name="paths"></param>
+        protected void CreateFileInTestDirectory(params string[] paths)
+        {
+            Core.Utilities.Guard.CheckIfNotNull(() => paths);
+            Assert.That(_needsTestDir, Is.True, $"The {nameof(NeedsTestDirAttribute)} is missing in the {GetType().Name} class.{Environment.NewLine}" +
+                                                    $"Add the {nameof(NeedsTestDirAttribute)}");
+            var combinedPath = paths.Aggregate(TestDirectory, Path.Combine);
+            var directory = Path.GetDirectoryName(combinedPath);
+            Assert.That(()=>directory,Is.Not.Null,"Passed path could not be combined to a directory path");
+
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Directory.CreateDirectory(directory);
+
+            using (File.Create(combinedPath)) { }
+        }
+
+        #endregion
+
+
+        #endregion
+
     }
 
     public class TestBase<T> : TestBase where T : class

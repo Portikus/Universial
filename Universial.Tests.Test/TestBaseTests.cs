@@ -39,6 +39,45 @@ namespace Universial.Tests.Test
             //Assert
             Assert.That(() => Directory.Exists(TestDirectory), Is.False);
         }
+        
+        [Test]
+        [NeedsTestDir]
+        public void Test_if_CreateFileInTestDirectory_throws_no_exception_if_it_is_called_in_a_class_with_NeedsTestDirAttribute()
+        {
+            //Assert
+            const string fileName = "Test.xml";
+            Assert.That(() => CreateFileInTestDirectory(fileName), Throws.Nothing);
+        }
+
+        [Test]
+        [NeedsTestDir]
+        public void Test_if_CreateFileInTestDir_creates_file_in_TestDirectory()
+        {
+            //Arrange 
+            const string fileName = "Test.xml";
+
+            //Act
+            CreateFileInTestDirectory(fileName);
+
+            //Assert
+            Assert.That(() => File.Exists(Path.Combine(TestDirectory, fileName)), Is.True);
+        }
+
+        [Test]
+        [NeedsTestDir]
+        public void Test_if_CreateFileInTestDir_creates_file_in_TestDirectory_with_subFolder()
+        {
+            //Arrange 
+            const string fileName = "Test.xml";
+            var combine = Path.Combine(TestDirectory,"A","B","C", fileName);
+
+            //Act
+            CreateFileInTestDirectory("A","B","C",fileName);
+
+            //Assert
+            Assert.That(() =>File.Exists(combine), Is.True);
+        }
+
         public class TestBaseTestsNoAttribute : TestBase
         {
             [Test]
@@ -46,6 +85,15 @@ namespace Universial.Tests.Test
             {
                 //Assert
                 Assert.That(() => Directory.Exists(TestDirectory), Is.False);
+            }
+
+            [Test]
+            public void Test_if_CreateFileInTestDirectory_throws_a_exception_if_it_is_called_in_a_class_without_NeedsTestDirAttribute()
+            {
+                //Assert
+                const string fileName = "Test.xml";
+                Assert.That(() => CreateFileInTestDirectory(fileName), Throws.Exception);
+                Assert.That(() => File.Exists(Path.Combine(TestDirectory,fileName)), Is.False);
             }
         }
     }
