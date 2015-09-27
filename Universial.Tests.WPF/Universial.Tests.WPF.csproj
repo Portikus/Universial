@@ -38,6 +38,8 @@
       <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,10 +50,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\DateTimeToOnlyDateConverterTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Universial.Test\Universial.Test.csproj">
+      <Project>{9f0ec9a4-faee-485c-abab-343a4c065c58}</Project>
+      <Name>Universial.Test</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Universial.WPF\Universial.WPF.csproj">
+      <Project>{ed8da0cf-b3b3-4a0e-b416-1550b511ab86}</Project>
+      <Name>Universial.WPF</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
