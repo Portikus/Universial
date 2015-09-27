@@ -15,7 +15,8 @@ namespace Universial.WPF.Converter
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            var date = value.ToString();
+            return DateTime.Parse(date);
         }
     }
 }

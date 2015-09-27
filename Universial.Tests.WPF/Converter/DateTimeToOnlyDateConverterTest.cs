@@ -27,5 +27,18 @@ namespace Universial.Tests.WPF.Converter
             //Assert
             Assert.That(() => actual, Is.EqualTo(expected));
         }
+        [Test]
+        public void Test_if_converter_converts_back()
+        {
+            //Arrange 
+            var date = "30.12.2012";
+            var expected = new DateTime(2012, 12, 30);
+
+            //Act
+            var actual = SystemUnderTest.ConvertBack(date, typeof(string), null, CultureInfo.CurrentCulture);
+
+            //Assert
+            Assert.That(() => actual, Is.EqualTo(expected));
+        }
     }
 }
