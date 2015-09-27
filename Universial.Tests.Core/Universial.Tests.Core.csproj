@@ -60,8 +60,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\CastExtensionsTest.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTest.cs" />
-    <Compile Include="Extensions\StringExtensionsTest.cs" />
     <Compile Include="Extensions\Unity\UnityExtensionsTest.cs" />
     <Compile Include="Utilities\GuardTest.cs" />
     <Compile Include="Utilities\LambdaExpressionHelperTest.cs" />
