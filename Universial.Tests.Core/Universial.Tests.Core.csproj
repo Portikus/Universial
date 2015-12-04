@@ -60,6 +60,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Utilities\TaskHelperTest.cs" />
     <Compile Include="Extensions\CastExtensionsTest.cs" />
     <Compile Include="Extensions\DictionaryExtensionsTest.cs" />
     <Compile Include="Extensions\Unity\UnityExtensionsTest.cs" />
